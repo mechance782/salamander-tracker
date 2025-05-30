@@ -4,5 +4,6 @@
 export default function PreviewVideo({ params }){
     // Use Processing Form component
     // frame preview is child component of form
-    return <>{params.filename}</>
+    const filename = params.filename;
+    return <>{filename}</>
 }
