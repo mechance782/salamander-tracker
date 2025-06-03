@@ -37,4 +37,32 @@ class dfsGroupFinder{
         return groups;
     }
 
+    dfs(image, startY, startX, groupInfo){
+        const directions = [
+            [-1, 0],
+            [1, 0],
+            [0, -1],
+            [0, 1]
+        ];
+
+        const stack = [[startX, startY]];
+
+        while(stack.length > 0){
+            const [x, y] = stack.pop();
+
+            if(y<0 || y>=image.length || x<0 || x>=image[y].length || image[y][x] ===0){
+                continue;
+            }
+
+            image[x][y] = 0;
+
+            groupInfo[0] += 1;
+            groupInfo[1] +=x;
+            groupInfo[2] += y;
+
+            for (const [dx, dy] of directions){
+                stack.push([x + dx, y + dy]);
+            }
+        }
+    }
 }
