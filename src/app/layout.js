@@ -1,11 +1,14 @@
 
+import { VideoProvider } from "@/context/VideoContext";
 import Navigation from "@/components/Navigation";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Navigation/>
-        {children}
+        <VideoProvider>
+          <Navigation/>
+          {children}
+        </VideoProvider>
       </body>
     </html>
   );
