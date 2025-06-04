@@ -39,7 +39,7 @@ export default function PreviewVideo({ params }){
                 const canvasContext = canvas.getContext('2d');
                 canvasContext.drawImage(img, 0, 0);
                 setThumbnailCanvas(canvas);
-                createBinaryImage(canvas, 70, 793736);
+                createBinaryImage(canvas, 70, 0x7a2d2a);
             }
 
         } catch (err) {
@@ -59,6 +59,6 @@ export default function PreviewVideo({ params }){
     }
 
     return <>
-        { binaryCanvas ? (<img src={binaryCanvas} alt="binary canvas"/>): (<p>loading...</p>)}
+        { binaryCanvas ? (<img src={binaryCanvas} alt="binary canvas" width={300}/>): (<p>loading...</p>)}
     </>
 }
