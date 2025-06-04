@@ -1,5 +1,5 @@
-import 'euclideanColorDistance.js';
-class distanceImageBinarizer{
+import euclideanColorDistance from "./euclideanColorDistance";
+export default class distanceImageBinarizer{
 
     constructor(distanceFinder, threshold, targetColor){
         this.distanceFinder = distanceFinder;
@@ -32,11 +32,13 @@ class distanceImageBinarizer{
                 const green = imageData[i + 1];
                 const blue = imageData[i + 2];
 
-                const hex = (red << 16) | (green << 8) | blue;
+                const hex = ((1 << 24) + (red << 16) + (green << 8) + blue).toString(16).slice(1);
 
                 const difference = this.distanceFinder.distance(hex, this.targetColor);
+                
 
                 if (difference < this.threshold){
+                    console.log('difference: ', difference);
                     row.push(1);
                 } else {
                     row.push(0);

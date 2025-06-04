@@ -1,5 +1,7 @@
 "use client"
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
+import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
 // Shows thumbnail of video + binarized thumbnail of video
 // Use form for color picker, video file picker, and Threshold 
 // page should change based on any form changes
@@ -7,12 +9,12 @@ import { useEffect, useState } from "react";
 // frame preview is child component of form
 export default function PreviewVideo({ params }){
     const [thumbnailCanvas, setThumbnailCanvas] = useState(null);
+    const [binaryCanvas, setBinaryCanvas] = useState(null);
     
     // edit this to make url match with params.filename
     useEffect(() => {
         fetchAndConvertImage("http://localhost:3000/thumbnail/Multiple30fps.mp4");
     }, [])
-
 
     // fetch image at current url and convert it to canvas
     // canvas can be displayed as img by setting src to canvas.toDataURL('image/jpeg')
@@ -37,6 +39,7 @@ export default function PreviewVideo({ params }){
                 const canvasContext = canvas.getContext('2d');
                 canvasContext.drawImage(img, 0, 0);
                 setThumbnailCanvas(canvas);
+                createBinaryImage(canvas, 70, 793736);
             }
 
         } catch (err) {
@@ -44,7 +47,18 @@ export default function PreviewVideo({ params }){
         }
     } 
 
+    const createBinaryImage = (thumbnail, threshold, targetColor) => {
+        const colorDistance = new euclideanColorDistance();
+        const binarizer = new distanceImageBinarizer(colorDistance, threshold, targetColor);
+        const array = binarizer.toBinaryArray(thumbnail);
+        console.log(array);
+        const binaryCanvas = binarizer.toCanvasImage(array);
+        const url = binaryCanvas.toDataURL('image/jpeg');
+        setBinaryCanvas(url);
+
+    }
+
     return <>
-        processing
+        { binaryCanvas ? (<img src={binaryCanvas} alt="binary canvas"/>): (<p>loading...</p>)}
     </>
 }
