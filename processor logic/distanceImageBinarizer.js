@@ -53,5 +53,32 @@ class distanceImageBinarizer{
             throw new Error("toCanvasImage: Array cannot be null")
         }
 
+        const height = image.length;
+        const width = image[0].length;
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext("2d");
+
+        const contextData = context.createImageData(width, height);
+        const data = contextData.data;
+
+        for (let y = 0; y < height; y++){
+            for(let x = 0; x < width; x++){
+                const i = (y * width + x) * 4;
+                const color = image[y][x];
+                // if color = 1 hex is white, otherwise hex is black
+                const hex = color == 1 ? 0xffffff: 0x000000;
+
+                data[i] = (hex >> 16) & 0xff;
+                data[i + 1] = (hex >> 8) & 0xff;
+                data[i + 2] = hex & 0xff;
+                data[i + 3] = 255;
+            }
+        }
+
+        context.putImageData(contextData, 0, 0);
+        return canvas;
     }
 }
