@@ -33,13 +33,11 @@ export default class distanceImageBinarizer{
                 const blue = imageData[i + 2];
 
                 const hexString = ((1 << 24) + (red << 16) + (green << 8) + blue).toString(16).slice(1);
-                const hex = hexString & 0xff;
-                const difference = this.distanceFinder.distance(hex, this.targetColor);
+                const hex = parseInt(hexString, 16);
                 
+                const difference = this.distanceFinder.distance(hex, this.targetColor);
 
                 if (difference < this.threshold){
-                    console.log("hex: ", hex, "target:", this.targetColor);
-                    console.log('difference: ', difference);
                     row.push(1);
                 } else {
                     row.push(0);
