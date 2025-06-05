@@ -1,7 +1,17 @@
 "use client"
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Slider from '@mui/material/Slider'
+import Select from '@mui/material/Select'
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
 import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
+import FramePreview from "@/components/FramePreview";
+import { useVideos } from "@/context/VideoContext";
+
+
 // Shows thumbnail of video + binarized thumbnail of video
 // Use form for color picker, video file picker, and Threshold 
 // page should change based on any form changes
@@ -11,6 +21,8 @@ export default function PreviewVideo({ params }){
     const [thumbnailCanvas, setThumbnailCanvas] = useState(null);
     const [binaryCanvas, setBinaryCanvas] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
+    const {videos} = useVideos();
+
     
     // edit this to make url match with params.filename
     useEffect(() => {
@@ -43,7 +55,8 @@ export default function PreviewVideo({ params }){
                 canvas.height = img.height;
                 const canvasContext = canvas.getContext('2d');
                 canvasContext.drawImage(img, 0, 0);
-                setThumbnailCanvas(canvas);
+                const url = canvas.toDataURL('image/jpeg')
+                setThumbnailCanvas(url);
                 createBinaryImage(canvas, 90, 0x7a2d2a);
             }
 
@@ -56,7 +69,6 @@ export default function PreviewVideo({ params }){
         const colorDistance = new euclideanColorDistance();
         const binarizer = new distanceImageBinarizer(colorDistance, threshold, targetColor);
         const array = binarizer.toBinaryArray(thumbnail);
-        console.log(array);
         const binaryCanvas = binarizer.toCanvasImage(array);
         const url = binaryCanvas.toDataURL('image/jpeg');
         setBinaryCanvas(url);
@@ -88,7 +100,28 @@ export default function PreviewVideo({ params }){
     }
 
     return <>
-        <img src={thumbnail} alt="thumbnail" width={300}/>
-        { binaryCanvas ? (<img src={binaryCanvas} alt="binary canvas" width={300}/>): (<p>loading...</p>)}
+        <form>
+            
+            <Typography>Select Video: </Typography>
+            <Select size="small" id="videoSelect" label="Select Video:" sx={{minWidth: 100}} autoWidth > 
+                <MenuItem value="">None</MenuItem>
+                {videos.map((video, key) => (
+                    <MenuItem key={key} value={video}>{video}</MenuItem>
+                ))}
+            </Select>
+
+            <FramePreview props={{thumbnailCanvas, binaryCanvas}}/>
+            
+            <Grid container sx={{justifyContent: "space-around"}}>
+                <Grid>
+                    <Typography display="inline">Select Color: </Typography>
+                    <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                </Grid>
+                <Grid>
+                    <Typography>Select Threshold: </Typography>
+                    <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+                </Grid>
+            </Grid>
+        </form>
     </>
 }

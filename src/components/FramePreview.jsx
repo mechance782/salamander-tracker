@@ -2,3 +2,8 @@
 // this is necessary because processing form contains video picker list
 // so the frame thumbnail will depend on the selected video in the form
 // image binarizing logic can happen here or we can use a new child component
+export default function FramePreview({ props }){
+    return(<>
+    
+    </>)
+}
