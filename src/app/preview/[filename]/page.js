@@ -14,11 +14,16 @@ import distanceImageBinarizer from "../../../../processor logic/distanceImageBin
 export default function PreviewVideo({ params }){
     const [thumbnailCanvas, setThumbnailCanvas] = useState(null);
     const [binaryCanvas, setBinaryCanvas] = useState(null);
+    const [thumbnail, setThumbnail] = useState(null);
     
     // edit this to make url match with params.filename
     useEffect(() => {
-        fetchAndConvertImage("http://localhost:3000/thumbnail/Multiple30fps.mp4");
-    }, [])
+        fetchAndConvertImage("http://localhost:3000/thumbnail/test.mp4");
+    }, []);
+
+    useEffect(() =>{
+        fetchRegularImage(`http://localhost:3000/thumbnail/test.mp4`);
+    }, []);
 
     // fetch image at current url and convert it to canvas
     // canvas can be displayed as img by setting src to canvas.toDataURL('image/jpeg')
@@ -43,7 +48,7 @@ export default function PreviewVideo({ params }){
                 const canvasContext = canvas.getContext('2d');
                 canvasContext.drawImage(img, 0, 0);
                 setThumbnailCanvas(canvas);
-                createBinaryImage(canvas, 70, 0x7a2d2a);
+                createBinaryImage(canvas, 90, 0x7a2d2a);
             }
 
         } catch (err) {
@@ -59,6 +64,30 @@ export default function PreviewVideo({ params }){
         const url = binaryCanvas.toDataURL('image/jpeg');
         setBinaryCanvas(url);
 
+    }
+
+    const fetchRegularImage = async (url) =>{
+        const response = await fetch(url);
+        if(!response.ok) throw new Error ("Unable to fetch original image");
+        const blob = await response.blob();
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.src = URL.createObjectURL(blob);
+
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+        })
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        const thumbnailurl = canvas.toDataURL('image/jpeg');
+        setThumbnail(thumbnailurl);
     }
 
     return <>
