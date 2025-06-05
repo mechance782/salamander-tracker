@@ -8,6 +8,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button"
+import SendIcon from '@mui/icons-material/Send';
 import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
 import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
 import FramePreview from "@/components/FramePreview";
@@ -20,10 +22,13 @@ import { useVideos } from "@/context/VideoContext";
 // Use Processing Form component
 // frame preview is child component of form
 export default function PreviewVideo({ params }){
+    const [thumbnailUrl, setThumbnailUrl] = useState(null);
     const [thumbnailCanvas, setThumbnailCanvas] = useState(null);
     const [binaryCanvas, setBinaryCanvas] = useState(null);
-    const [thumbnail, setThumbnail] = useState(null);
     const [filename, setFilename] = useState("");
+    const [targetColor, setTargetColor] = useState("#000000");
+    const [threshold, setThreshold] = useState(30);
+
     const {videos} = useVideos();
     const router = useRouter();
     
@@ -31,57 +36,62 @@ export default function PreviewVideo({ params }){
         fetchAndConvertImage();
     }, []);
 
-    useEffect(() =>{
-        fetchRegularImage(`http://localhost:3000/thumbnail/test.mp4`);
-    }, []);
-
     // fetch image at current url and convert it to canvas
     // canvas can be displayed as img by setting src to canvas.toDataURL('image/jpeg')
     // canvas can also be iterated over pixel by pixel (good for dfs)
     const fetchAndConvertImage = async () => {
-        try {
-            // get filename params
-            const {filename} = await params;
-            setFilename(filename);
-            const url = "http://localhost:3000/thumbnail/" + filename;
-            // fetch image as blob
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch error')
-            const blob = await response.blob();
+        // get filename params
+        const {filename} = await params;
+        setFilename(filename);
 
-            // create image from blob
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.src = URL.createObjectURL(blob);
-
-            // fill canvas with image information and save canvas to state
-            img.onload = () => {
-                // compress thumbnail image for faster processing
-                const maxSize = 600;
-                let width = img.width;
-                let height = img.height;
-                const scale = Math.min(maxSize / width, maxSize / height, 1);
-                width = width * scale;
-                height = height * scale;
+        // if user has chosen a video other than the default,
+        // then fetch thumbnail
+        if (filename !== '...'){
+            try {
                 
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                const canvasContext = canvas.getContext('2d');
-                canvasContext.drawImage(img, 0, 0, width, height);
-                const url = canvas.toDataURL('image/jpeg')
-                setThumbnailCanvas(url);
-                createBinaryImage(canvas, 20, 0x793736);
-            }
+                const url = "http://localhost:3000/thumbnail/" + filename;
+                // fetch image as blob
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Failed to fetch error')
+                const blob = await response.blob();
 
-        } catch (err) {
-            console.error("Image fetching error: ", err);
+                // create image from blob
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.src = URL.createObjectURL(blob);
+
+                // fill canvas with image information and save canvas to state
+                img.onload = () => {
+                    // compress thumbnail image for faster processing
+                    const maxSize = 600;
+                    let width = img.width;
+                    let height = img.height;
+                    const scale = Math.min(maxSize / width, maxSize / height, 1);
+                    width = width * scale;
+                    height = height * scale;
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const canvasContext = canvas.getContext('2d');
+                    canvasContext.drawImage(img, 0, 0, width, height);
+                    const url = canvas.toDataURL('image/jpeg')
+                    setThumbnailCanvas(canvas);
+                    setThumbnailUrl(url);
+                    createBinaryImage(canvas, threshold, targetColor);
+                }
+
+            } catch (err) {
+                console.error("Image fetching error: ", err);
+            }
         }
     } 
 
     const createBinaryImage = (thumbnail, threshold, targetColor) => {
+        const hexString = targetColor.slice(1);
+        const hex = parseInt(hexString, 16);
         const colorDistance = new euclideanColorDistance();
-        const binarizer = new distanceImageBinarizer(colorDistance, threshold, targetColor);
+        const binarizer = new distanceImageBinarizer(colorDistance, threshold, hex);
         const array = binarizer.toBinaryArray(thumbnail);
         const binaryCanvas = binarizer.toCanvasImage(array);
         const url = binaryCanvas.toDataURL('image/jpeg');
@@ -89,45 +99,60 @@ export default function PreviewVideo({ params }){
 
     }
 
-    const fetchRegularImage = async (url) =>{
-        const response = await fetch(url);
-        if(!response.ok) throw new Error ("Unable to fetch original image");
-        const blob = await response.blob();
-
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.src = URL.createObjectURL(blob);
-
-        await new Promise((resolve, reject) => {
-            img.onload = resolve;
-            img.onerror = reject;
-        })
-
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const context = canvas.getContext('2d');
-        context.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        const thumbnailurl = canvas.toDataURL('image/jpeg');
-        setThumbnail(thumbnailurl);
-    }
-
     const handleVideoSelect = (event) => {
         const selectedVideo = event.target.value;
-        if (selectedVideo !== filename && selectedVideo !== ""){
+        if (selectedVideo !== filename){
             router.push('/preview/' + selectedVideo);
         }
     }
 
-    return <>
-        <form>
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-            <Box sx={{margin: "auto", maxWidth: 1000 }}>
-                <Box margin={2} ml={0}>
+        const hexString = targetColor.slice(1);
+        const hex = parseInt(hexString, 16);
+
+        try {
+            const response = await fetch(`http://localhost:3000/process/${filename}?targetColor=${hex}&threshold=${threshold}`, {
+                method: 'POST'
+            });
+
+            if (!response.ok){
+                throw new Error('Error: ', response.status);
+            } else {
+                const data = await response.json();
+                console.log(data);
+                const jobId = data.jobId;
+                router.push('/status/' + jobId);
+            }
+
+        } catch (error) {
+            console.error('Post form Error: ', error);
+        }
+    }
+
+    const handleColorSelect = (event) => {
+        const selectedColor = event.target.value;
+        
+        setTargetColor(selectedColor);
+        createBinaryImage(thumbnailCanvas, threshold, selectedColor);
+    }
+
+    const handleThresholdSelect = (event) => {
+        const selectedThreshold = event.target.value;
+        setThreshold(selectedThreshold);
+        createBinaryImage(thumbnailCanvas, selectedThreshold, targetColor);
+    }
+
+    return <>
+        <form onSubmit={handleSubmit}>
+
+            <Grid container direction="column" sx={{margin: "auto", maxWidth: 1000 }}>
+                {/* video selection */}
+                <Box mb={2} ml={0}>
                     <Typography>Select Video: </Typography>
                     <Select onChange={handleVideoSelect} size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth value={filename}>
-                        <MenuItem value="">None</MenuItem>
+                        <MenuItem value="...">None</MenuItem>
                         {videos.map((video, key) => (
                             <MenuItem key={key} value={video}>{video}</MenuItem>
                         ))}
@@ -136,22 +161,32 @@ export default function PreviewVideo({ params }){
 
                 <Card sx={{padding: 2}} >
                     
+                    {/* determine whether user has chosen a video */}
+                    {filename == '...' ? (<Typography textAlign="center">Choose video to preview</Typography>) 
+                    : (<Typography textAlign="center">Previewing {filename}</Typography>)}
                     
-                    <Typography textAlign="center">Previewing {filename}</Typography>
-                    <FramePreview before={thumbnailCanvas} after={binaryCanvas}/>
+                    {/* display video thumbnails */}
+                    <FramePreview before={thumbnailUrl} after={binaryCanvas}/>
                     
+                    {/* color and threshold selection */}
                     <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
                         <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
                             <Typography display="inline">Select Color: </Typography>
-                            <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                            <input onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
                         </Grid>
                         <Grid size="grow"  maxWidth={350}>
                             <Typography>Select Threshold: </Typography>
-                            <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+                            <Slider onChange={handleThresholdSelect} value={threshold} valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
                         </Grid>
                     </Grid>
                 </Card>
-            </Box>
+
+                {/* submit button is disabled if thumbnail doesn't exist (usually means video file doesn't exist either) */}
+                {thumbnailUrl ? (<Button type="submit" variant="contained" endIcon={<SendIcon />} sx={{padding: 2, mt: 2, width: 250, alignSelf: "end"}}>Send Processing Job</Button>) 
+                : (<Button disabled variant="contained" endIcon={<SendIcon />} sx={{padding: 2, mt: 2, width: 250, alignSelf: "end"}}>Send Processing Job</Button>)}
+                
+
+            </Grid>
         </form>
     </>
 }
