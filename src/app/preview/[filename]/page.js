@@ -109,8 +109,7 @@ export default function PreviewVideo({ params }){
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const hexString = targetColor.slice(1);
-        const hex = parseInt(hexString, 16);
+        const hex = targetColor.slice(1);
 
         try {
             const response = await fetch(`http://localhost:3000/process/${filename}?targetColor=${hex}&threshold=${threshold}`, {
