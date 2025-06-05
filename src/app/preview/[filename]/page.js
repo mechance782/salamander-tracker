@@ -58,7 +58,7 @@ export default function PreviewVideo({ params }){
                 canvasContext.drawImage(img, 0, 0);
                 const url = canvas.toDataURL('image/jpeg')
                 setThumbnailCanvas(url);
-                createBinaryImage(canvas, 90, 0x7a2d2a);
+                createBinaryImage(canvas, 20, 0x793736);
             }
 
         } catch (err) {
@@ -103,30 +103,35 @@ export default function PreviewVideo({ params }){
     return <>
         <form>
 
-            <Box margin={2}>
-                <Typography>Select Video: </Typography>
-                <Select size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth >
-                    <MenuItem value="">None</MenuItem>
-                    {videos.map((video, key) => (
-                        <MenuItem key={key} value={video}>{video}</MenuItem>
-                    ))}
-                </Select>
-            </Box>
+            <Box sx={{margin: "auto", maxWidth: 1000 }}>
+                <Box margin={2} ml={0}>
+                    <Typography>Select Video: </Typography>
+                    <Select size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth >
+                        <MenuItem value="">None</MenuItem>
+                        {videos.map((video, key) => (
+                            <MenuItem key={key} value={video}>{video}</MenuItem>
+                        ))}
+                    </Select>
+                </Box>
 
-            <Card sx={{margin: 2, padding: 2}}>
-                <FramePreview props={{thumbnailCanvas, binaryCanvas}}/>
-                
-                <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
-                    <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
-                        <Typography display="inline">Select Color: </Typography>
-                        <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                <Card sx={{padding: 2}} >
+                    
+                    
+                    <Typography textAlign="center">Previewing {params.filename}</Typography>
+                    <FramePreview before={thumbnailCanvas} after={binaryCanvas}/>
+                    
+                    <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
+                        <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
+                            <Typography display="inline">Select Color: </Typography>
+                            <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                        </Grid>
+                        <Grid size="grow"  maxWidth={350}>
+                            <Typography>Select Threshold: </Typography>
+                            <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+                        </Grid>
                     </Grid>
-                    <Grid size="grow"  maxWidth={500}>
-                        <Typography>Select Threshold: </Typography>
-                        <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
-                    </Grid>
-                </Grid>
-            </Card>
+                </Card>
+            </Box>
         </form>
     </>
 }
