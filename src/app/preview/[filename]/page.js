@@ -1,7 +1,11 @@
 "use client"
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Slider from '@mui/material/Slider'
+import Select from '@mui/material/Select'
+import Typography from "@mui/material/Typography";
 import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
 import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
+
 // Shows thumbnail of video + binarized thumbnail of video
 // Use form for color picker, video file picker, and Threshold 
 // page should change based on any form changes
@@ -51,7 +55,6 @@ export default function PreviewVideo({ params }){
         const colorDistance = new euclideanColorDistance();
         const binarizer = new distanceImageBinarizer(colorDistance, threshold, targetColor);
         const array = binarizer.toBinaryArray(thumbnail);
-        console.log(array);
         const binaryCanvas = binarizer.toCanvasImage(array);
         const url = binaryCanvas.toDataURL('image/jpeg');
         setBinaryCanvas(url);
@@ -59,6 +62,18 @@ export default function PreviewVideo({ params }){
     }
 
     return <>
-        { binaryCanvas ? (<img src={binaryCanvas} alt="binary canvas" width={300}/>): (<p>loading...</p>)}
+        <form>
+
+            <Typography>Select Video: </Typography>
+            <Select id="videoSelect" label="Select Video:"> 
+                {/* map through videos and create menuItems */}
+            </Select>
+
+            <Typography>Select Color: </Typography>
+            <input type="color" name="colorPicker" id="colorPicker" />
+
+            <Typography>Select Threshold: </Typography>
+            <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+        </form>
     </>
 }
