@@ -1,30 +1,27 @@
 "use client"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
-export default function Status({ params }){
+export default function Status({ params }) {
+    const hasFetched = useRef(false);
 
     useEffect(() => {
-        fetchJobStatus();
-    }, [])
+        if (!hasFetched.current) {
+            hasFetched.current = true;
+            fetchJobStatus();
+        }
+    }, []);
 
     const fetchJobStatus = async () => {
-        const { jobId } = await params;
-
         try {
+            const { jobId } = await params; 
             const response = await fetch(`http://localhost:3000/process/${jobId}/status`);
 
-            if (!response.ok) throw new Error('http error: ', response.status);
-
             const data = await response.json();
-
             console.log(data);
-
-
-        } catch (error){
-            throw new Error('error fetching job status: ', error)
+        } catch (error) {
+            console.log('error fetching job status:' + error);
         }
+    };
 
-    }
-    
-    return(<></>)
+    return (<></>);
 }

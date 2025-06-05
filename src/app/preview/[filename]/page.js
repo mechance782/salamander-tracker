@@ -120,7 +120,6 @@ export default function PreviewVideo({ params }){
                 throw new Error('Error: ', response.status);
             } else {
                 const data = await response.json();
-                console.log(data);
                 const jobId = data.jobId;
                 router.push('/status/' + jobId);
             }
