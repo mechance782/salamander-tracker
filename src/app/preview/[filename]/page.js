@@ -56,11 +56,19 @@ export default function PreviewVideo({ params }){
 
             // fill canvas with image information and save canvas to state
             img.onload = () => {
+                // compress thumbnail image for faster processing
+                const maxSize = 600;
+                let width = img.width;
+                let height = img.height;
+                const scale = Math.min(maxSize / width, maxSize / height, 1);
+                width = width * scale;
+                height = height * scale;
+                
                 const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
+                canvas.width = width;
+                canvas.height = height;
                 const canvasContext = canvas.getContext('2d');
-                canvasContext.drawImage(img, 0, 0);
+                canvasContext.drawImage(img, 0, 0, width, height);
                 const url = canvas.toDataURL('image/jpeg')
                 setThumbnailCanvas(url);
                 createBinaryImage(canvas, 20, 0x793736);
