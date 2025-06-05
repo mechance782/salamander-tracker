@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Slider from '@mui/material/Slider'
 import Select from '@mui/material/Select'
 import Typography from "@mui/material/Typography";
@@ -22,12 +23,12 @@ export default function PreviewVideo({ params }){
     const [thumbnailCanvas, setThumbnailCanvas] = useState(null);
     const [binaryCanvas, setBinaryCanvas] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
+    const [filename, setFilename] = useState("");
     const {videos} = useVideos();
-
+    const router = useRouter();
     
-    // edit this to make url match with params.filename
     useEffect(() => {
-        fetchAndConvertImage("http://localhost:3000/thumbnail/test.mp4");
+        fetchAndConvertImage();
     }, []);
 
     useEffect(() =>{
@@ -37,8 +38,12 @@ export default function PreviewVideo({ params }){
     // fetch image at current url and convert it to canvas
     // canvas can be displayed as img by setting src to canvas.toDataURL('image/jpeg')
     // canvas can also be iterated over pixel by pixel (good for dfs)
-    const fetchAndConvertImage = async (url) => {
+    const fetchAndConvertImage = async () => {
         try {
+            // get filename params
+            const {filename} = await params;
+            setFilename(filename);
+            const url = "http://localhost:3000/thumbnail/" + filename;
             // fetch image as blob
             const response = await fetch(url);
             if (!response.ok) throw new Error('Failed to fetch error')
@@ -100,13 +105,20 @@ export default function PreviewVideo({ params }){
         setThumbnail(thumbnailurl);
     }
 
+    const handleVideoSelect = (event) => {
+        const selectedVideo = event.target.value;
+        if (selectedVideo !== filename && selectedVideo !== ""){
+            router.push('/preview/' + selectedVideo);
+        }
+    }
+
     return <>
         <form>
 
             <Box sx={{margin: "auto", maxWidth: 1000 }}>
                 <Box margin={2} ml={0}>
                     <Typography>Select Video: </Typography>
-                    <Select size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth >
+                    <Select onChange={handleVideoSelect} size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth value={filename}>
                         <MenuItem value="">None</MenuItem>
                         {videos.map((video, key) => (
                             <MenuItem key={key} value={video}>{video}</MenuItem>
@@ -117,7 +129,7 @@ export default function PreviewVideo({ params }){
                 <Card sx={{padding: 2}} >
                     
                     
-                    <Typography textAlign="center">Previewing {params.filename}</Typography>
+                    <Typography textAlign="center">Previewing {filename}</Typography>
                     <FramePreview before={thumbnailCanvas} after={binaryCanvas}/>
                     
                     <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
