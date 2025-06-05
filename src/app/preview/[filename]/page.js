@@ -4,6 +4,7 @@ import Slider from '@mui/material/Slider'
 import Select from '@mui/material/Select'
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
+import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
@@ -101,27 +102,31 @@ export default function PreviewVideo({ params }){
 
     return <>
         <form>
-            
-            <Typography>Select Video: </Typography>
-            <Select size="small" id="videoSelect" label="Select Video:" sx={{minWidth: 100}} autoWidth > 
-                <MenuItem value="">None</MenuItem>
-                {videos.map((video, key) => (
-                    <MenuItem key={key} value={video}>{video}</MenuItem>
-                ))}
-            </Select>
 
-            <FramePreview props={{thumbnailCanvas, binaryCanvas}}/>
-            
-            <Grid container sx={{justifyContent: "space-around"}}>
-                <Grid>
-                    <Typography display="inline">Select Color: </Typography>
-                    <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+            <Box margin={2}>
+                <Typography>Select Video: </Typography>
+                <Select size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth >
+                    <MenuItem value="">None</MenuItem>
+                    {videos.map((video, key) => (
+                        <MenuItem key={key} value={video}>{video}</MenuItem>
+                    ))}
+                </Select>
+            </Box>
+
+            <Card sx={{margin: 2, padding: 2}}>
+                <FramePreview props={{thumbnailCanvas, binaryCanvas}}/>
+                
+                <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
+                    <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
+                        <Typography display="inline">Select Color: </Typography>
+                        <input style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                    </Grid>
+                    <Grid size="grow"  maxWidth={500}>
+                        <Typography>Select Threshold: </Typography>
+                        <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+                    </Grid>
                 </Grid>
-                <Grid>
-                    <Typography>Select Threshold: </Typography>
-                    <Slider valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
-                </Grid>
-            </Grid>
+            </Card>
         </form>
     </>
 }
