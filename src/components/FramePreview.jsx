@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
+import Skeleton from "@mui/material/Skeleton";
 // frame preview will be child component of processing form
 // this is necessary because processing form contains video picker list
 // so the frame thumbnail will depend on the selected video in the form
@@ -17,7 +18,11 @@ export default function FramePreview({ before, after }){
                     <CardContent>
                         <Typography textAlign="center">Pre-processing</Typography>
                     </CardContent>
-                    <CardMedia sx={{objectFit: "contain", mb: 2, maxHeight: 350}} height="auto" component="img" image={before} alt="thumbnail of video before processing"/>
+                    {/* display image if loaded */}
+                    {before ? (
+                        <CardMedia sx={{objectFit: "contain", mb: 2, maxHeight: 350}} height="auto" component="img" image={before} alt="thumbnail of video before processing"/>) 
+                        : (<Skeleton sx={{mb: 2}} variant="rectangular" height={350} />)}
+                    
                 </Card>
             </Grid>
 
@@ -27,7 +32,11 @@ export default function FramePreview({ before, after }){
                     <CardContent>
                         <Typography textAlign="center">Post-processing</Typography>
                     </CardContent>
-                    <CardMedia sx={{objectFit: "contain", mb: 2, maxHeight: 350}} height="auto" component="img" image={after} alt="thumbnail of video after processing"/>
+                    {/* display image after loading */}
+                    {after ? (
+                        <CardMedia sx={{objectFit: "contain", mb: 2, maxHeight: 350}} height="auto" component="img" image={after} alt="thumbnail of video after processing"/>) 
+                        : (<Skeleton sx={{mb: 2}} variant="rectangular" height={350} />)}
+                    
                 </Card>
             </Grid>
 
