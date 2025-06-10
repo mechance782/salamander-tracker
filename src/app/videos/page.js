@@ -2,6 +2,8 @@
 import { useVideos } from "@/context/VideoContext"
 import { useState, useEffect } from "react";
 import VideoCard from "@/components/VideoCard";
+import { Typography } from "@mui/material";
+import {Grid} from "@mui/material";
 
 // Displays list of available videos with links to preview pages
 // and links to actual video files in static video directory
@@ -49,9 +51,13 @@ export default function VideoChooser(){
     // pass data to VideoList component for it to be displayed
     return (
         <>
-            {videoThumbnails.map((video) =>{
-                return <VideoCard key={video.filename} video={video}/>
-            })}
+            <Typography sx={{p:2}} variant="h4" component="h1">Preview All Videos</Typography>
+                <Grid container spacing={2} sx={{ p: 2 }}>
+                  {videoThumbnails.map((video) =>{
+                    return <VideoCard  key={video.filename} video={video}/>
+                })}  
+                </Grid>
+                
         </>
     )
 
