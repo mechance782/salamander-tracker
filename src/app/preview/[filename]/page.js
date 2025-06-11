@@ -14,6 +14,7 @@ import euclideanColorDistance from "../../../../processor logic/euclideanColorDi
 import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
 import FramePreview from "@/components/FramePreview";
 import { useVideos } from "@/context/VideoContext";
+import { useJobs } from "@/context/JobContext";
 
 
 // Shows thumbnail of video + binarized thumbnail of video
@@ -28,7 +29,7 @@ export default function PreviewVideo({ params }){
     const [filename, setFilename] = useState("");
     const [targetColor, setTargetColor] = useState("#000000");
     const [threshold, setThreshold] = useState(30);
-
+    const { addJob } = useJobs();
     const {videos} = useVideos();
     const router = useRouter();
     
@@ -121,6 +122,7 @@ export default function PreviewVideo({ params }){
             } else {
                 const data = await response.json();
                 const jobId = data.jobId;
+                addJob(jobId);
                 router.push('/status/' + jobId);
             }
 
