@@ -1,8 +1,11 @@
 "use client"
 import {Grid, Card, Typography, Divider, Button, IconButton, Tooltip} from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh';
+import DownloadIcon from '@mui/icons-material/Download';
+import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
+import JobList from '@/components/JobList';
 
 export default function Status({ params }) {
     const [thisJobId, setThisJobId] = useState(null)
@@ -13,6 +16,7 @@ export default function Status({ params }) {
     const [csvUrl, setCsvUrl] = useState(null)
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isDone, setIsDone] = useState(false);
 
 
     useEffect(() => {
@@ -61,23 +65,44 @@ export default function Status({ params }) {
     const handleRefresh = () => {
         setLoading(true)
         setRefresh(prev => !prev)
-        
     };
 
+    const switchDownloadIcon = () => {
+        setIsDone(true);
+    }
+
+    function DownloadingIcon({isDone}){
+        return(<>
+        {isDone ? <DownloadDoneIcon /> : <DownloadIcon />}
+        </>)
+    }
+
     return (<>
-        <Card sx={{padding: 2}}>
-                <Typography component='h1' variant='h6'>Overview of Job <Typography component='span' color='primary.dark'>{thisJobId}</Typography>:</Typography>
-                <Divider />
-                <Grid sx={{margin: 2}}>
+        <Grid container gap={2}>
+            <Grid size={{xs: 12, sm: 12, md: 'grow'}}>
+                <Card sx={{padding: 2}}>
+                    <Typography component='h1' variant='h6'>Overview of Job <Typography component='span' color='primary.dark'>{thisJobId}</Typography>:</Typography>
+                    <Divider />
+                    <Grid sx={{ margin: 2 }}>
 
-                    <Typography color={statusColor}><Typography color='textPrimary' component='span' sx={{fontWeight: "bold"}}>Status:</Typography> {jobStatus}
-                     {jobStatus == 'processing' ? (<>... <Tooltip title="Refresh"><IconButton onClick={handleRefresh} loading={loading}><RefreshIcon /></IconButton></Tooltip></>): (<></>)}</Typography>
+                        <Typography color={statusColor}><Typography color='textPrimary' component='span' sx={{ fontWeight: "bold" }}>Status:</Typography> {jobStatus}
+                            {jobStatus == 'processing' ? (<>... <Tooltip title="Refresh"><IconButton onClick={handleRefresh} loading={loading}><RefreshIcon /></IconButton></Tooltip></>) : (<></>)}</Typography>
 
-                    {jobResult ? (<><Typography sx={{fontWeight: "bold"}}>Result:<Link download href={csvUrl}><Button>{jobResult}</Button></Link></Typography></>):(<></>)}
-                    {jobError ? (<Typography color={statusColor}>*{jobError}</Typography>) : (<></>)}
-                    
-                </Grid>
-        </Card>
+                        {jobResult ? (<><Typography sx={{ fontWeight: "bold" }}>Result:
+                            <Tooltip title="Download CSV File">
+                                <Link download={thisJobId} href={csvUrl}><Button onClick={switchDownloadIcon} endIcon={<DownloadingIcon isDone={isDone} />}>{jobResult}</Button></Link>
+                            </Tooltip>
+                        </Typography></>) : (<></>)}
+                        {jobError ? (<Typography color={statusColor}>*{jobError}</Typography>) : (<></>)}
 
+                    </Grid>
+                </Card>
+            </Grid>
+            
+            <Grid size={{xs: 12, sm: 12, md: 'grow'}}>
+               <JobList /> 
+            </Grid>
+            
+        </Grid>
     </>);
 }
