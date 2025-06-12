@@ -52,7 +52,7 @@ export default function VideoChooser(){
     return (
         <>
             <Typography sx={{p:2}} variant="h4" component="h1">Preview All Videos</Typography>
-                <Grid container spacing={2} sx={{ p: 2 }}>
+                <Grid container spacing={2} sx={{ p: 2 , color: 'primary.main'}}>
                   {videoThumbnails.map((video) =>{
                     return <VideoCard  key={video.filename} video={video}/>
                 })}  
