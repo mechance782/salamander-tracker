@@ -151,7 +151,7 @@ export default function PreviewVideo({ params }){
                 {/* video selection */}
                 <Box mb={2} ml={0}>
                     <Typography>Select Video: </Typography>
-                    <Select onChange={handleVideoSelect} size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth value={filename}>
+                    <Select data-cy="select-video-input" onChange={handleVideoSelect} size="small" id="videoSelect" label="Select Video:" sx={{ minWidth: 200 }} autoWidth value={filename}>
                         <MenuItem value="...">None</MenuItem>
                         {videos.map((video, key) => (
                             <MenuItem key={key} value={video}>{video}</MenuItem>
