@@ -159,7 +159,7 @@ export default function PreviewVideo({ params }){
                     </Select>
                 </Box>
 
-                <Card sx={{padding: 2,  backgroundColor: 'info.secondary'}} >
+                <Card sx={{padding: 2,  backgroundColor: 'secondary.main'}} >
                     
                     {/* determine whether user has chosen a video */}
                     {filename == '...' ? (<Typography textAlign="center">Choose video to preview</Typography>) 

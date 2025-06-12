@@ -15,7 +15,7 @@ const themeOptions = createTheme({
       main: '#5A6E6C',
     },
     secondary: {
-      main: '#7D9BA3',
+      main: '#aebabd',
     },
     info: {
       main: '#B3A9A1',

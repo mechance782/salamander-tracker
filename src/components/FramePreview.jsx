@@ -14,7 +14,7 @@ export default function FramePreview({ before, after }){
 
             {/* pre processing */}
             <Grid size="grow" sx={{maxWidth: 350}}>
-                <Card>
+                <Card sx={{backgroundColor: '#d2d9d6'}}>
                     <CardContent>
                         <Typography textAlign="center">Pre-processing</Typography>
                     </CardContent>
@@ -28,7 +28,7 @@ export default function FramePreview({ before, after }){
 
             {/* post processing */}
             <Grid size="grow" sx={{maxWidth: 350}}>
-                <Card>
+                <Card sx={{backgroundColor: '#d2d9d6'}}>
                     <CardContent>
                         <Typography textAlign="center">Post-processing</Typography>
                     </CardContent>
