@@ -29,7 +29,7 @@ export default function PreviewVideo({ params }){
     const [filename, setFilename] = useState("");
     const [targetColor, setTargetColor] = useState("#000000");
     const [threshold, setThreshold] = useState(30);
-    const { addJob } = useJobs();
+    const {onUpdate} = useJobs();
     const {videos} = useVideos();
     const router = useRouter();
     
@@ -122,7 +122,7 @@ export default function PreviewVideo({ params }){
             } else {
                 const data = await response.json();
                 const jobId = data.jobId;
-                addJob(jobId);
+                onUpdate();
                 router.push('/status/' + jobId);
             }
 
