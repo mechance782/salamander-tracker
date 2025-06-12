@@ -51,8 +51,8 @@ export default function VideoChooser(){
     // pass data to VideoList component for it to be displayed
     return (
         <>
-            <Typography sx={{p:2}} variant="h4" component="h1">Preview All Videos</Typography>
-                <Grid container spacing={2} sx={{ p: 2 , color: 'primary.main'}}>
+                <Grid container spacing={2} sx={{ p: 2 , color: 'primary.main', width: '80%', margin: 'auto'}}>
+                  <Typography sx={{p:2}} variant="h4" component="h1">Preview All Videos</Typography>
                   {videoThumbnails.map((video) =>{
                     return <VideoCard  key={video.filename} video={video}/>
                 })}  

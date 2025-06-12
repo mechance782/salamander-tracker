@@ -147,7 +147,7 @@ export default function PreviewVideo({ params }){
     return <>
         <form onSubmit={handleSubmit}>
 
-            <Grid container direction="column" sx={{margin: "auto", maxWidth: 1000 }}>
+            <Grid container direction="column" sx={{margin: "auto", maxWidth: 1000}}>
                 {/* video selection */}
                 <Box mb={2} ml={0}>
                     <Typography>Select Video: </Typography>
@@ -159,7 +159,7 @@ export default function PreviewVideo({ params }){
                     </Select>
                 </Box>
 
-                <Card sx={{padding: 2}} >
+                <Card sx={{padding: 2,  backgroundColor: 'info.secondary'}} >
                     
                     {/* determine whether user has chosen a video */}
                     {filename == '...' ? (<Typography textAlign="center">Choose video to preview</Typography>) 
