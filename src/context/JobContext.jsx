@@ -11,6 +11,7 @@ export function JobProvider({children}){
         const fetchJobs = async () => {
             const response = await fetch("http://localhost:3000/api/jobs");
             const result = await response.json();
+            result.reverse();
             setCurrentJobs(result);
         };
 
