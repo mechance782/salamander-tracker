@@ -172,7 +172,7 @@ export default function PreviewVideo({ params }){
                     <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
                         <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
                             <Typography display="inline">Select Color: </Typography>
-                            <input onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                            <input data-cy="color-input" onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
                         </Grid>
                         <Grid size="grow"  maxWidth={350}>
                             <Typography>Select Threshold: </Typography>

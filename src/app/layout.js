@@ -4,8 +4,14 @@ import Navigation from "@/components/Navigation";
 import { JobProvider } from "@/context/JobContext";
 import { createTheme} from '@mui/material/styles';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+import { useEffect, useState } from "react";
 
 export default function RootLayout({ children }) {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 const themeOptions = createTheme({
   palette: {
     background: {
@@ -69,7 +75,7 @@ const themeOptions = createTheme({
         }],
 }}});
 
-
+  if (!hasMounted) return (<html><body></body></html>);
   return (
     <html lang="en">
       <head>
