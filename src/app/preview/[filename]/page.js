@@ -172,11 +172,15 @@ export default function PreviewVideo({ params }){
                     <Grid container sx={{justifyContent: "space-evenly"}} spacing={10}>
                         <Grid container spacing={1} sx={{alignItems: "center", justifyContent: "center"}}>
                             <Typography display="inline">Select Color: </Typography>
-                            <input data-cy="color-input" onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />
+                            {thumbnailUrl ? (<input data-cy="color-input" onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />)
+                             : (<input disabled data-cy="color-input" onChange={handleColorSelect} value={targetColor} style={{width: 60, height: 60}} type="color" name="colorPicker" id="colorPicker" />)}
+                            
                         </Grid>
                         <Grid size="grow"  maxWidth={350}>
                             <Typography>Select Threshold: </Typography>
-                            <Slider onChange={handleThresholdSelect} value={threshold} valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />
+                            {thumbnailUrl ? (<Slider data-cy="threshold-slider" onChange={handleThresholdSelect} value={threshold} valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />) 
+                            : (<Slider disabled data-cy="threshold-slider" onChange={handleThresholdSelect} value={threshold} valueLabelDisplay="auto" aria-label="Select Threshold" name="thresholdPicker" />)}
+                            
                         </Grid>
                     </Grid>
                 </Card>
