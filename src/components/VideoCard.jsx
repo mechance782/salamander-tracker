@@ -8,7 +8,7 @@ export default function VideoCard ({video}){
 
 
     return(
-        <Grid item sx={{ p: 2, backgroundColor: '#faf3ed' , padding: '5%', borderRadius: 2, border: '1.5px solid rgb(247, 242, 235)', boxShadow: '0 2px 5px rgba(0,0,0,0.1'}}>
+        <Grid item sx={{ p: 2, backgroundColor: '#8fa3a0' , padding: '5%', borderRadius: 2, border: '1.5px solid rgb(247, 242, 235)', boxShadow: '0 2px 5px rgba(0,0,0,0.1'}}>
             <Card>
                 <CardContent>
                     <Typography>Video Filename: {video.filename} </Typography>

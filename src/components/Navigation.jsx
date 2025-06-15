@@ -11,9 +11,11 @@ export default function Navigation(){
                     <Link href="/videos"><Button color="inherit" variant='nav'>Available Videos</Button></Link>
                     <Link href="/preview/..."><Button color="inherit" variant='nav'>Process Video</Button></Link> 
                 </Box>
-                <Typography variant="title" component="h1" sx={{flexGrow: 1, fontWeight: 'bold',fontFamily: 'Raleway, sans-serif',letterSpacing: 0.2,color: '#7b8f86', textAlign: 'center',textShadow: `-0.5px -0.5px 0 #000,0.5px -0.5px 0 #000,-0.5px  0.5px 0 #000,0.5px  0.5px 0 #000`}}>
-                    SALAMANDER TRACKER
-                </Typography>
+<Typography variant="h3" component="h1" sx={{ flexGrow: 0.5, fontWeight: 'bold', fontFamily: 'Raleway, sans-serif', letterSpacing: 1, textAlign: 'center', color: '#8fa3a0', textTransform: 'uppercase', mt: 2 }}>
+  SALAMANDER TRACKER
+</Typography>
+
+
             </Toolbar>
             
         </AppBar>

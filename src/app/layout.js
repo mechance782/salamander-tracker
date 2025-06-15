@@ -15,13 +15,13 @@ export default function RootLayout({ children }) {
 const themeOptions = createTheme({
   palette: {
     background: {
-      default: '#fcf8f5',
+      default: '#F5F7F6 ',
     },
     primary: {
-      main: '#5A6E6C',
+      main: '#556871',
     },
     secondary: {
-      main: '#aebabd',
+      main: '#7D9BA3',
     },
     info: {
       main: '#B3A9A1',
@@ -52,7 +52,7 @@ const themeOptions = createTheme({
         {
           props: { variant: 'nav' },
             style: {
-              background: 'linear-gradient(45deg, #B3A9A1 30%, rgb(169, 189, 177) 90%)',
+              background: 'linear-gradient(45deg,rgb(208, 209, 210) 30%, rgb(169, 189, 185) 90%)',
               border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: 20,
               color: '#2e2e2e',
