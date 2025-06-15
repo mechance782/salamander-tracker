@@ -18,7 +18,8 @@ docker run \
   -p 3000:3000 \
   -v "$VIDEO_DIRECTORY:/videos" \
   -v "$RESULTS_DIRECTORY:/results" \
-  ghcr.io/mechance728/salamander:latest
+  ghcr.io/mechance728/salamander:latest 
+```
 
 > ⚠️ **Important:**  
 > Make sure to replace `$VIDEO_DIRECTORY` and `$RESULTS_DIRECTORY` with **absolute paths** on your machine:
