@@ -31,18 +31,33 @@ docker run \
 
 ## Getting Started
 
-First, run the development server:
+After starting the backend using the docker command, run the development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3001) with your browser to see the result.
 
 ---
 
 ## Features
+### Video Chooser Page (`/videos`)
+- Fetches a list of videos from `/api/videos`
+- Displays them in a responsive grid
+- Allows clicking on any video to jump to its preview page
 
----
+### Preview & Processing Page (`/preview/:filename`)
+- Fetches and displays the first frame of the video
+- Allows users to:
+  - Pick a target color (via color picker)
+  - Adjust a binarization threshold (via slider)
+  - See a real-time preview of how the binary image will look
+  - Visualize the centroid of the largest object
+- Button to submit the video for full processing
+- Polls the backend for job status and displays CSV download when ready
 
-## 🔧 Technologies Used
+### Processing Pipeline
+- `POST /process/{filename}?targetColor=ff0000&threshold=50`
+- Polls `GET /process/{jobId}/status` until job is complete
+- Users can then download a CSV result file of the processing job.
