@@ -1,5 +1,11 @@
-import { Box, Typography, Grid, List, ListItem } from "@mui/material";
+import { Paper, Typography, Grid, List, ListItem } from "@mui/material";
 
+
+const Section = ({ children }) => (
+  <Paper sx={{ p: 3, height: '100%', backgroundColor: '#DCE3E5', borderRadius: 2 }} elevation={3}>
+    {children}
+  </Paper>
+);
 export default function Home() {
 
   return (
