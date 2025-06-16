@@ -1,11 +1,27 @@
 import { Paper, Typography, Grid, List, ListItem } from "@mui/material";
+import { useEffect, useState } from "react";
+import { amphibianFacts } from "@/amphibianFacts";
 
+const getRandomFact = () => {
+  const index = Math.floor(Math.random() * amphibianFacts.length);
+  return amphibianFacts[index];
+}
+
+const getRandomDelay = () => {
+  return Math.floor(Math.random() * 5000) + 5000;
+}
 
 const Section = ({ children }) => (
   <Paper sx={{ p: 3, height: '100%', backgroundColor: '#DCE3E5', borderRadius: 2 }} elevation={3}>
     {children}
   </Paper>
 );
+
+function FunFactRotator() {
+  const [fact, setFact] = useState(getRandomFact);
+
+}
+
 export default function Home() {
 
 return (
