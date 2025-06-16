@@ -35,7 +35,11 @@ function FunFactRotator() {
 
     return () => clearTimeout(timeout);
   }, []);
-
+  return(
+    <>
+      <Typography>{fact.fact}</Typography>
+    </>
+  )
 }
 
 export default function Home() {
@@ -56,7 +60,6 @@ return (
       <Grid item xs={12} md={5}>
         <Section>
           <FunFactRotator />
-          <Typography variant="h6">{fact.fact}</Typography>
         </Section>
       </Grid>
 
