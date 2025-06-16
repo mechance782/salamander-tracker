@@ -1,3 +1,4 @@
+"use client"
 import { Paper, Typography, Grid, List, ListItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import { amphibianFacts } from "@/amphibianFacts";
@@ -20,6 +21,21 @@ const Section = ({ children }) => (
 function FunFactRotator() {
   const [fact, setFact] = useState(getRandomFact);
 
+  useEffect(() => {
+    let timeout;
+
+    const scheduleNextFact = () => {
+      timeout = setTimeout(() => {
+        setFact(getRandomFact());
+        scheduleNextFact();
+      }, getRandomDelay());
+    };
+
+    scheduleNextFact();
+
+    return () => clearTimeout(timeout);
+  }, []);
+
 }
 
 export default function Home() {
@@ -39,7 +55,8 @@ return (
 
       <Grid item xs={12} md={5}>
         <Section>
-          <Typography variant="h6">Allie the axolotl goes here</Typography>
+          <FunFactRotator />
+          <Typography variant="h6">{fact.fact}</Typography>
         </Section>
       </Grid>
 
