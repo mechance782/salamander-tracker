@@ -60,14 +60,13 @@ describe('preview page form', () => {
     cy.intercept('GET', 'http://localhost:3000/process/fake-job-id-1234/status', { status: "processing"}).as('getJob');
     cy.get('[data-cy="submit-job-button"]').click()
     cy.url().should('include', 'fake-job-id-1234');
-    cy.get('[data-cy="status-refresh-button"]').click()
     cy.contains('p', "processing");
     cy.intercept('GET', 'http://localhost:3000/process/fake-job-id-1234/status', {
       statusCode: 200,
       body: { status: "done", result: '/video2.csv'}
     }).as('getJob');
     cy.intercept('GET', 'http://localhost:3000/video2.csv', {fixture: 'video2'}).as('getCsvFile');
-    cy.get('[data-cy="status-refresh-button"]').click()
+    cy.wait('@getCsvFile')
     cy.contains('p', 'done');
     cy.contains('button', 'video2.csv');
     cy.contains('a', 'fake-job-id-1234').invoke('attr', 'href').should('eq', '/status/fake-job-id-1234');
