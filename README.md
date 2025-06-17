@@ -17,15 +17,13 @@ You can run the backend with Docker using the following command:
 docker run \
   -p 3000:3000 \
   -v "$VIDEO_DIRECTORY:/videos" \
-  -v "$RESULTS_DIRECTORY:/results" \
   ghcr.io/mechance728/salamander:latest 
 ```
 
 > ⚠️ **Important:**  
-> Make sure to replace `$VIDEO_DIRECTORY` and `$RESULTS_DIRECTORY` with **absolute paths** on your machine:
+> Make sure to replace `$VIDEO_DIRECTORY` with **absolute paths** on your machine:
 >
 > - **`$VIDEO_DIRECTORY`** should be the full path to a folder that contains the videos you want to process.
-> - **`$RESULTS_DIRECTORY`** should be the full path to a folder where you want the backend to save the resulting CSV files.
 
 ---
 
