@@ -186,7 +186,7 @@ export default function PreviewVideo({ params }){
                 </Card>
 
                 {/* submit button is disabled if thumbnail doesn't exist (usually means video file doesn't exist either) */}
-                {thumbnailUrl ? (<Button type="submit" variant="contained" endIcon={<SendIcon />} sx={{padding: 2, mt: 2, width: 250, alignSelf: "end"}}>Send Processing Job</Button>) 
+                {thumbnailUrl ? (<Button data-cy="submit-job-button" type="submit" variant="contained" endIcon={<SendIcon />} sx={{padding: 2, mt: 2, width: 250, alignSelf: "end"}}>Send Processing Job</Button>) 
                 : (<Button disabled variant="contained" endIcon={<SendIcon />} sx={{padding: 2, mt: 2, width: 250, alignSelf: "end"}}>Send Processing Job</Button>)}
                 
 

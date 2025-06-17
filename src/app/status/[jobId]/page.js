@@ -37,6 +37,7 @@ export default function Status({ params }) {
             } else {
                 setJobStatus(data.status)
                 if (data.result){
+                    
                     const resultLink = 'http://localhost:3000' + data.result;
                     await handleDownload(resultLink);
                     setJobResult(data.result)
@@ -86,11 +87,11 @@ export default function Status({ params }) {
                     <Grid sx={{ margin: 2 }}>
 
                         <Typography color={statusColor}><Typography color='textPrimary' component='span' sx={{ fontWeight: "bold" }}>Status:</Typography> {jobStatus}
-                            {jobStatus == 'processing' ? (<>... <Tooltip title="Refresh"><IconButton onClick={handleRefresh} loading={loading}><RefreshIcon /></IconButton></Tooltip></>) : (<></>)}</Typography>
+                            {jobStatus == 'processing' ? (<>... <Tooltip title="Refresh"><IconButton data-cy="status-refresh-button" onClick={handleRefresh} loading={loading}><RefreshIcon /></IconButton></Tooltip></>) : (<></>)}</Typography>
 
                         {jobResult ? (<><Typography sx={{ fontWeight: "bold" }}>Result:
                             <Tooltip title="Download CSV File">
-                                <Link download={thisJobId} href={csvUrl}><Button onClick={switchDownloadIcon} endIcon={<DownloadingIcon isDone={isDone} />}>{jobResult}</Button></Link>
+                                <Link download={thisJobId} href={csvUrl}><Button data-cy="download-csv-button" onClick={switchDownloadIcon} endIcon={<DownloadingIcon isDone={isDone} />}>{jobResult}</Button></Link>
                             </Tooltip>
                         </Typography></>) : (<></>)}
                         {jobError ? (<Typography color={statusColor}>*{jobError}</Typography>) : (<></>)}
