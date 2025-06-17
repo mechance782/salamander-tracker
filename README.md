@@ -1,6 +1,5 @@
 # Salamander Tracker – Interactive Video Analysis Frontend
 
-
 ## Overview
 This project is a React-based frontend that works with a backend API (built in our other class, SDEV 355 - Algorithms) to allow researchers at The Ohio State University to track salamanders in their research environments a little easier. Users can select a video, preview it, tweak processing settings like color and threshold, and then submit a job to analyze the video. The backend then processes the video and returns a downloadable CSV file of the detected coordinates.
 
@@ -59,3 +58,6 @@ Open [http://localhost:3000](http://localhost:3001) with your browser to see the
 - `POST /process/{filename}?targetColor=ff0000&threshold=50`
 - Polls `GET /process/{jobId}/status` until job is complete
 - Users can then download a CSV result file of the processing job.
+
+
+[Presentation Slides](https://docs.google.com/presentation/d/18hO6xN5iRbBb0IZE1ZLIITYwBefRYz0IStsnhxoUPKY/edit?usp=sharing)
