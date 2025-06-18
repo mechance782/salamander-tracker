@@ -10,8 +10,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button"
 import SendIcon from '@mui/icons-material/Send';
-import euclideanColorDistance from "../../../../processor logic/euclideanColorDistance";
-import distanceImageBinarizer from "../../../../processor logic/distanceImageBinarizer";
+import euclideanColorDistance from "../../../../processorLogic/euclideanColorDistance";
+import distanceImageBinarizer from "../../../../processorLogic/distanceImageBinarizer";
 import FramePreview from "@/components/FramePreview";
 import { useVideos } from "@/context/VideoContext";
 import { useJobs } from "@/context/JobContext";
